@@ -7,8 +7,8 @@ import {
 import { protectedRoute } from "../middlewares/auth.middleware.js";
 const albumRouter = express.Router();
 
-albumRouter.get("/", protectedRoute, getAllAlbums);
-albumRouter.get("/featured", protectedRoute, getFeaturedAlbums);
-albumRouter.get("/:id", protectedRoute, getAlbumById);
+albumRouter.get("/", getAllAlbums);
+albumRouter.get("/featured", getFeaturedAlbums);
+albumRouter.get("/:id", getAlbumById);
 
 export default albumRouter;
