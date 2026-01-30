@@ -1,6 +1,7 @@
 import Song from "../models/song.model.js";
 import Album from "../models/album.model.js";
-import { uploadToFirebase,deleteFromFirebase } from "../utils/media.operations.js";
+import Playlist from "../models/playlist.model.js";
+import { uploadToFirebase, deleteFromFirebase } from "../utils/media.operations.js";
 
 export const addSong = async (req, res) => {
   try {
@@ -149,7 +150,61 @@ export const deleteAlbum = async (req, res) => {
   }
 };
 
+export const addPlaylist = async (req, res) => {
+  try {
+    const { title, artist, songs } = req.body;
+    if (!title || !artist || !req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Title, artist, and cover image are required.",
+      });
+    }
+    const coverImageUrl = await uploadToFirebase(req.file);
+    const newPlaylist = new Playlist({
+      title,
+      artist,
+      coverImage: coverImageUrl,
+      songs: songs || [],
+    });
+    await newPlaylist.save();
+    res.status(201).json({
+      success: true,
+      message: "Playlist added successfully",
+      playlist: newPlaylist,
+    });
+  } catch (error) {
+    console.error("Error adding playlist:", error);
+    res.status(500).json({
+      success: false,
+      message: "An unexpected error occurred while adding the playlist.",
+    });
+  }
+};
+
+export const deletePlaylist = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Playlist ID is required",
+      });
+    }
+    await Playlist.findByIdAndDelete(id);
+    res.status(200).json({
+      success: true,
+      message: "Playlist deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting playlist:", error);
+    res.status(500).json({
+      success: false,
+      message: "An unexpected error occurred while deleting the playlist.",
+    });
+  }
+};
+
 export const checkAdmin = async (req, res) => {
-  return res.status(200).json({ admin : true });
+  return res.status(200).json({ admin: true });
 }
 

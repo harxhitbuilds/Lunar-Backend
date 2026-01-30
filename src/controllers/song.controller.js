@@ -21,7 +21,7 @@ export const getFeaturedSongs = async (req, res) => {
   try {
     const songs = await Song.aggregate([
       {
-        $sample: { size: 8 },
+        $sample: { size: 9 },
       },
       {
         $project: {
@@ -52,7 +52,7 @@ export const trendingSongs = async (req, res) => {
   try {
     const songs = await Song.aggregate([
       {
-        $sample: { size: 5 },
+        $sample: { size: 6 },
       },
       {
         $project: {
@@ -83,7 +83,7 @@ export const getMadeForYouSongs = async (req, res) => {
   try {
     const songs = await Song.aggregate([
       {
-        $sample: { size: 5 },
+        $sample: { size: 6 },
       },
       {
         $project: {
@@ -141,3 +141,5 @@ export const searchSongs = async (req, res) => {
     });
   }
 };
+
+

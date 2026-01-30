@@ -44,6 +44,7 @@ import authRouter from "./routes/auth.route.js";
 import adminRouter from "./routes/admin.route.js";
 import songRouter from "./routes/song.route.js";
 import albumRouter from "./routes/album.route.js";
+import playlistRouter from "./routes/playlist.route.js";
 import statsRouter from "./routes/stats.route.js";
 
 // routes
@@ -51,6 +52,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/songs", songRouter);
 app.use("/api/v1/albums", albumRouter);
+app.use("/api/v1/playlist", playlistRouter);
 app.use("/api/v1/stats", statsRouter);
 
 // server started
