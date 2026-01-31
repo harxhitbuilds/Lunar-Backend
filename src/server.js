@@ -52,7 +52,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/songs", songRouter);
 app.use("/api/v1/albums", albumRouter);
-app.use("/api/v1/playlist", playlistRouter);
+app.use("/api/v1/playlists", playlistRouter);
 app.use("/api/v1/stats", statsRouter);
 
 // server started

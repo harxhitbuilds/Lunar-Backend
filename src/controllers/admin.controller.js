@@ -1,11 +1,14 @@
 import Song from "../models/song.model.js";
 import Album from "../models/album.model.js";
 import Playlist from "../models/playlist.model.js";
-import { uploadToFirebase, deleteFromFirebase } from "../utils/media.operations.js";
+import {
+  uploadToFirebase,
+  deleteFromFirebase,
+} from "../utils/media.operations.js";
 
 export const addSong = async (req, res) => {
   try {
-    const { title, artist, duration, albumId } = req.body;
+    const { title, artist, duration, albumId, playlistIds } = req.body;
     if (!title || !artist || !duration) {
       return res.status(400).json({
         success: false,
@@ -29,6 +32,7 @@ export const addSong = async (req, res) => {
       duration,
       url: audioFileUrl,
       albumId: albumId || null,
+      playlistIds: playlistIds
     });
     await newSong.save();
     if (albumId) {
@@ -36,6 +40,23 @@ export const addSong = async (req, res) => {
         $push: { songs: newSong._id },
       });
     }
+
+    let playlistIdsArr = [];
+
+    if (playlistIds) {
+      if (Array.isArray(playlistIds)) {
+        playlistIdsArr = playlistIds;
+      } else if (typeof playlistIds === "string") {
+        playlistIdsArr = [playlistIds];
+      }
+      for (const playlistId of playlistIdsArr) {
+        await Playlist.findByIdAndUpdate(playlistId, {
+          $push: { songs: newSong._id }
+        });
+      }
+    }
+
+
 
     res.status(201).json({
       success: true,
@@ -105,7 +126,7 @@ export const addAlbum = async (req, res) => {
         message: "Cover image is required.",
       });
     }
-    const coverImageUrl = await uploadImageToFirebase(req.file);
+    const coverImageUrl = await uploadToFirebase(req.file);
     const newAlbum = new Album({
       title,
       artist,
@@ -206,5 +227,4 @@ export const deletePlaylist = async (req, res) => {
 
 export const checkAdmin = async (req, res) => {
   return res.status(200).json({ admin: true });
-}
-
+};

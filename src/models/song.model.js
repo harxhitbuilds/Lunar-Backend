@@ -29,6 +29,13 @@ const songSchema = new mongoose.Schema(
       ref: "Album",
       default: null,
     },
+    playlistIds: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Playlist",
+        default: null
+      }
+    ]
   },
   {
     timestamps: true,

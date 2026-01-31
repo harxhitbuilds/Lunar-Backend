@@ -4,6 +4,7 @@ import {
   deleteSong,
   addAlbum,
   deleteAlbum,
+  addPlaylist, deletePlaylist
 } from "../controllers/admin.controller.js";
 import { uploadMedia } from "../middlewares/multer.js";
 import { protectedRoute, adminOnly } from "../middlewares/auth.middleware.js";
@@ -32,5 +33,13 @@ adminRouter.delete("/delete-song/:id", deleteSong);
 adminRouter.post("/add-album", uploadMedia.single("coverImage"), addAlbum);
 
 adminRouter.delete("/delete-album/:id", deleteAlbum);
+
+adminRouter.post(
+  "/add-playlist",
+  uploadMedia.single("coverImage"),
+  addPlaylist
+);
+
+adminRouter.delete("/delete-playlist/:id", deletePlaylist)
 
 export default adminRouter;
